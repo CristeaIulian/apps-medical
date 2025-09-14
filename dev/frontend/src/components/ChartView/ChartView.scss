@@ -1,0 +1,19 @@
+.mini_chart {
+    &--mini {
+        height: 80px !important;
+        width: 100%;
+        position: relative;
+
+        canvas {
+            border-radius: var(--radius-sm);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .mini_chart {
+        &--mini {
+            height: 60px !important;
+        }
+    }
+}

@@ -1,0 +1,195 @@
+.badge {
+    display: inline-block;
+    padding: var(--spacing-4) var(--spacing-8);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: white;
+
+    &.badge-sm {
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--font-size-xxs);
+    }
+
+    &.badge-default {
+        background-color: #444444;
+    }
+
+    // categories
+    &.badge-category-action {
+        background-color: #ffcdd2 !important;
+        color: #c63737 !important;
+    }
+
+    &.badge-category-adventures {
+        background-color: #c8e6c9 !important;
+        color: #256029 !important;
+    }
+
+    &.badge-category-comedy {
+        background-color: #b3e5fc !important;
+        color: #23547b !important;
+    }
+
+    &.badge-category-crime {
+        background-color: #feedaf !important;
+        color: #8a5340 !important;
+    }
+
+    &.badge-category-development {
+        background-color: #eccfff !important;
+        color: #694382 !important;
+    }
+
+    &.badge-category-documentary {
+        background-color: #ffd8b2 !important;
+        color: #805b36 !important;
+    }
+
+    &.badge-category-drama {
+        background-color: #ffcdd2 !important;
+        color: #c63737 !important;
+    }
+
+    &.badge-category-fantasy {
+        background-color: #c8e6c9 !important;
+        color: #256029 !important;
+    }
+
+    &.badge-category-history {
+        background-color: #b3e5fc !important;
+        color: #23547b !important;
+    }
+
+    &.badge-category-horror {
+        background-color: #feedaf !important;
+        color: #8a5340 !important;
+    }
+
+    &.badge-category-it {
+        background-color: #eccfff !important;
+        color: #694382 !important;
+    }
+
+    &.badge-category-lifestyle {
+        background-color: #ffd8b2 !important;
+        color: #805b36 !important;
+    }
+
+    &.badge-category-mystery {
+        background-color: #ffcdd2 !important;
+        color: #c63737 !important;
+    }
+
+    &.badge-category-psychology {
+        background-color: #c8e6c9 !important;
+        color: #256029 !important;
+    }
+
+    &.badge-category-romance {
+        background-color: #b3e5fc !important;
+        color: #23547b !important;
+    }
+
+    &.badge-category-science {
+        background-color: #feedaf !important;
+        color: #8a5340 !important;
+    }
+
+    &.badge-category-sci-fi {
+        background-color: #eccfff !important;
+        color: #694382 !important;
+    }
+
+    &.badge-category-thriller {
+        background-color: #ffd8b2 !important;
+        color: #805b36 !important;
+    }
+
+    &.badge-category-western {
+        background-color: #ffcdd2 !important;
+        color: #c63737 !important;
+    }
+
+    &.badge-category-biography {
+        background-color: #c8e6c9 !important;
+        color: #256029 !important;
+    }
+
+    &.badge-category-family {
+        background-color: #b3e5fc !important;
+        color: #23547b !important;
+    }
+
+    &.badge-category-nutrition {
+        background-color: #feedaf !important;
+        color: #8a5340 !important;
+    }
+
+    &.badge-category-neuroscience {
+        background-color: #eccfff !important;
+        color: #694382 !important;
+    }
+
+    &.badge-category-war {
+        background-color: #c8e6c9 !important;
+        color: #256029 !important;
+    }
+
+    &.badge-category-biology {
+        background-color: #d4f4dd !important; // Verde deschis
+        color: #1b5e20 !important; // Verde închis
+    }
+
+    &.badge-category-genetics {
+        background-color: #e1f5fe !important; // Albastru foarte deschis
+        color: #0d47a1 !important; // Albastru închis
+    }
+
+    &.badge-category-nature {
+        background-color: #f3e5f5 !important; // Mov deschis
+        color: #4a148c !important; // Mov închis
+    }
+
+    // ownership
+    &.badge-ownership-borrowed {
+        background-color: #ffcdd2 !important;
+        color: #c63737 !important;
+    }
+
+    &.badge-ownership-in-delivery {
+        background-color: #cdfff2 !important;
+        color: #37bac6 !important;
+    }
+
+    &.badge-ownership-dont-have-it {
+        background-color: #b3e5fc !important;
+        color: #23547b !important;
+    }
+
+    &.badge-ownership-i-have-it {
+        background-color: #c8e6c9 !important;
+        color: #256029 !important;
+    }
+
+    &.badge-ownership-in-cart {
+        background-color: #fab1d3 !important;
+        color: #8c5974 !important;
+    }
+
+    // state
+    &.badge-state-read {
+        background-color: #c8e6c9 !important;
+        color: #256029 !important;
+    }
+
+    &.badge-state-reading {
+        background-color: #ffd8b2 !important;
+        color: #805b36 !important;
+    }
+
+    &.badge-state-to-read {
+        background-color: #b3e5fc !important;
+        color: #23547b !important;
+    }
+}

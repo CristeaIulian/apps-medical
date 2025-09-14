@@ -1,0 +1,22 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Set the base directory for the rewrites
+RewriteBase /
+
+# Don't apply rules to existing files or directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite specific paths to index.html
+
+# If the request is for the root directory and index.html doesn't exist,
+# this rule isn't needed as the server will serve index.html by default
+# But including it for completeness:
+#RewriteRule ^$ index.html [L]
+RewriteRule ^$ index.php [L]
+
+# For any other URLs that should go to your SPA
+# Uncomment this if you need to handle deeper paths:
+
+RewriteRule ^(logout)([^`]*)$ index.php?arg=$1 [L]

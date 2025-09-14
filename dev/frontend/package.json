@@ -1,0 +1,73 @@
+{
+  "name": "medical",
+  "resolutions": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "version": "0.1.0",
+  "private": true,
+  "description": "A React application for medical tracking.",
+  "proxy": "http://medical",
+  "main": "index.js",
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "eject": "react-scripts eject",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\""
+  },
+  "keywords": [
+    "medical",
+    "analysis"
+  ],
+  "author": "Iulian Cristea",
+  "license": "ISC",
+  "dependencies": {
+    "@memobit/libs": "file:../../../MY-REACT-COMPONENTS-LIBRARY/memobit-libs-1.0.0.tgz",
+    "chart.js": "^4.4.0",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.4.1",
+    "react-scripts": "5.0.1",
+    "recharts": "^2.15.1",
+    "web-vitals": "^2.1.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "@eslint/js": "^9.33.0",
+    "@types/eslint": "^9.6.1",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/recharts": "^1.8.29",
+    "craco-alias": "^3.0.1",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.2.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.3.0",
+    "http-proxy-middleware": "^3.0.5",
+    "prettier": "^3.5.3",
+    "sass": "^1.86.1",
+    "typescript": "^4.9.5",
+    "typescript-eslint": "^8.39.1"
+  }
+}

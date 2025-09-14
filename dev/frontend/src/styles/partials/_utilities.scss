@@ -1,0 +1,93 @@
+.medical-grid {
+    display: grid;
+    gap: var(--spacing-16);
+
+    &--dashboard {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &--stats {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    &--settings {
+        grid-template-columns: 1fr;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
+
+.medical-section {
+    margin-bottom: var(--spacing-32);
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &__title {
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+        margin: 0 0 var(--spacing-24) 0;
+        padding-bottom: var(--spacing-12);
+        border-bottom: 2px solid var(--accent);
+    }
+}
+
+.medical-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--spacing-16);
+    transition: all 0.2s ease;
+
+    &--clickable {
+        cursor: pointer;
+
+        &:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+    }
+
+    &--highlighted {
+        border-color: var(--accent);
+        background: var(--accent) + '05';
+    }
+}
+
+// Status indicators
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-4) var(--spacing-8);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+
+    &--optimal {
+        background: var(--success) + '20';
+        color: var(--success);
+        border: 1px solid var(--success) + '60';
+    }
+
+    &--high {
+        background: var(--danger) + '20';
+        color: var(--danger);
+        border: 1px solid var(--danger) + '60';
+        animation: pulse-danger 2s infinite;
+    }
+
+    &--low {
+        background: var(--warning) + '20';
+        color: var(--warning);
+        border: 1px solid var(--warning) + '60';
+        animation: pulse-warning 2s infinite;
+    }
+}

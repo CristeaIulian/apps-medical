@@ -1,0 +1,245 @@
+// Import all partials-specific styles
+@use 'variables';
+@use 'mixins';
+@use 'utilities';
+@use 'animations';
+@use 'components';
+
+// Global partials app styles
+.medical-app {
+    min-height: 100vh;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+
+    // Smooth transitions for theme changes
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+// Layout grid for partials dashboard
+.medical-grid {
+    display: grid;
+    gap: var(--spacing-16);
+
+    &--dashboard {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &--stats {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    &--details {
+        grid-template-columns: 1fr 300px;
+
+        @media (max-width: 1024px) {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+// Common partials card styles
+.medical-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--spacing-16);
+    transition: all 0.2s ease;
+
+    &--clickable {
+        cursor: pointer;
+
+        &:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+    }
+
+    &--highlighted {
+        border-color: var(--accent);
+        background: var(--accent) + '05';
+    }
+
+    &--warning {
+        border-color: var(--warning);
+        background: var(--warning) + '05';
+    }
+
+    &--danger {
+        border-color: var(--danger);
+        background: var(--danger) + '05';
+    }
+}
+
+// Status indicators
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-4) var(--spacing-8);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+
+    &--optimal {
+        background: var(--success) + '20';
+        color: var(--success);
+        border: 1px solid var(--success) + '60';
+    }
+
+    &--high {
+        background: var(--danger) + '20';
+        color: var(--danger);
+        border: 1px solid var(--danger) + '60';
+        animation: pulse-danger 2s infinite;
+    }
+
+    &--low {
+        background: var(--warning) + '20';
+        color: var(--warning);
+        border: 1px solid var(--warning) + '60';
+        animation: pulse-warning 2s infinite;
+    }
+}
+
+// Value displays with status colors
+.value-display {
+    font-weight: var(--font-weight-bold);
+
+    &--optimal {
+        color: var(--success);
+    }
+
+    &--high {
+        color: var(--danger);
+    }
+
+    &--low {
+        color: var(--warning);
+    }
+
+    &--neutral {
+        color: var(--text-primary);
+    }
+}
+
+// Trend indicators
+.trend-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    font-size: var(--font-size-sm);
+
+    &--up {
+        color: var(--success);
+
+        &::before {
+            content: '↗️';
+        }
+    }
+
+    &--down {
+        color: var(--danger);
+
+        &::before {
+            content: '↘️';
+        }
+    }
+
+    &--stable {
+        color: var(--text-muted);
+
+        &::before {
+            content: '→';
+        }
+    }
+}
+
+// Loading states
+.medical-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-40);
+    color: var(--text-secondary);
+
+    &__spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: var(--spacing-16);
+    }
+
+    &__text {
+        font-size: var(--font-size-sm);
+    }
+}
+
+// Error states
+.medical-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-40);
+    text-align: center;
+
+    &__icon {
+        font-size: var(--font-size-xxl);
+        color: var(--danger);
+        margin-bottom: var(--spacing-16);
+    }
+
+    &__title {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+        margin: 0 0 var(--spacing-8) 0;
+    }
+
+    &__message {
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-24);
+    }
+}
+
+// Empty states
+.medical-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-60);
+    text-align: center;
+
+    &__icon {
+        font-size: var(--font-size-xxl);
+        color: var(--text-muted);
+        opacity: 0.5;
+        margin-bottom: var(--spacing-16);
+    }
+
+    &__title {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+        margin: 0 0 var(--spacing-8) 0;
+    }
+
+    &__message {
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-24);
+        max-width: 400px;
+    }
+}

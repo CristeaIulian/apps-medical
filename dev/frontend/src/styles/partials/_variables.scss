@@ -1,0 +1,113 @@
+// Medical-specific color palette
+:root {
+    // Category colors for partials test types
+    --medical-hematologie: #e53e3e;
+    --medical-hematologie-light: #e53e3e20;
+    --medical-hematologie-border: #e53e3e60;
+
+    --medical-lipide: #dd6b20;
+    --medical-lipide-light: #dd6b2020;
+    --medical-lipide-border: #dd6b2060;
+
+    --medical-metabolic: #38a169;
+    --medical-metabolic-light: #38a16920;
+    --medical-metabolic-border: #38a16960;
+
+    --medical-hepatic: #d69e2e;
+    --medical-hepatic-light: #d69e2e20;
+    --medical-hepatic-border: #d69e2e60;
+
+    --medical-renal: #3182ce;
+    --medical-renal-light: #3182ce20;
+    --medical-renal-border: #3182ce60;
+
+    --medical-hormonal: #805ad5;
+    --medical-hormonal-light: #805ad520;
+    --medical-hormonal-border: #805ad560;
+
+    // Status-specific colors
+    --medical-optimal: var(--success);
+    --medical-optimal-light: var(--success) + '20';
+    --medical-optimal-border: var(--success) + '60';
+
+    --medical-high: var(--danger);
+    --medical-high-light: var(--danger) + '20';
+    --medical-high-border: var(--danger) + '60';
+
+    --medical-low: var(--warning);
+    --medical-low-light: var(--warning) + '20';
+    --medical-low-border: var(--warning) + '60';
+
+    // Chart-specific colors
+    --chart-grid: var(--border) + '40';
+    --chart-tooltip-bg: var(--bg-tertiary);
+    --chart-tooltip-border: var(--accent);
+
+    // Medical component sizing
+    --medical-full-chart-height: 400px;
+    --medical-card-min-height: 180px;
+    --medical-sidebar-width: 300px;
+
+    // Medical-specific spacing
+    --medical-section-gap: var(--spacing-32);
+    --medical-card-gap: var(--spacing-16);
+    --medical-content-padding: var(--spacing-24);
+
+    // Animation durations
+    --medical-hover-duration: 0.2s;
+    --medical-fade-duration: 0.3s;
+    --medical-slide-duration: 0.4s;
+
+    // Border radius for partials components
+    --medical-card-radius: var(--radius);
+    --medical-badge-radius: var(--radius-sm);
+    --medical-button-radius: var(--radius);
+
+    // Box shadows
+    --medical-card-shadow: 0 2px 8px var(--shadow);
+    --medical-card-hover-shadow: 0 4px 16px var(--shadow);
+    --medical-modal-shadow: 0 8px 32px var(--surface-dark-bright);
+
+    // Z-index layers
+    --medical-dropdown-z: 100;
+    --medical-modal-z: 1000;
+    --medical-toast-z: 1100;
+    --medical-tooltip-z: 1200;
+
+    // Breakpoints
+    --medical-mobile-max: 767px;
+    --medical-tablet-min: 768px;
+    --medical-tablet-max: 991px;
+    --medical-desktop-min: 992px;
+    --medical-desktop-max: 1199px;
+    --medical-large-min: 1200px;
+}
+
+// SCSS variables for calculations and mixins
+$medical-categories: (
+    hematologie: var(--medical-hematologie),
+    lipide: var(--medical-lipide),
+    metabolic: var(--medical-metabolic),
+    hepatic: var(--medical-hepatic),
+    renal: var(--medical-renal),
+    hormonal: var(--medical-hormonal),
+);
+
+$medical-statuses: (
+    optimal: var(--medical-optimal),
+    high: var(--medical-high),
+    low: var(--medical-low),
+);
+
+$medical-breakpoints: (
+    mobile: 767px,
+    tablet: 991px,
+    desktop: 1199px,
+    large: 1400px,
+);
+
+// Medical component dimensions
+$full-chart-height: 400px;
+$sidebar-width: 300px;
+$header-height: 60px;
+$footer-height: 40px;

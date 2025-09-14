@@ -1,0 +1,62 @@
+:root {
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #404040;
+    --bg-quaternary: #525252;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-muted: #999999;
+    --accent: #007bff;
+    --accent-quarter: #007bff40;
+    --accent-hover: #0056b3;
+    --success: #28a745;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --danger-accent: #c82333;
+    --border: #404040;
+    --shadow: rgba(0, 0, 0, 0.3);
+
+    --surface-dark-dim: #0000004c;
+    --surface-dark-semidim: #0000007f;
+    --surface-dark-bright: #000000cc;
+
+    --radius-sm: 4px;
+    --radius: 8px;
+
+    --checkbox-size: 18px;
+    --radio-size: 18px;
+
+    --spacing-1: 1px;
+    --spacing-2: 2px;
+    --spacing-4: 4px;
+    --spacing-8: 8px;
+    --spacing-12: 12px;
+    --spacing-16: 16px;
+    --spacing-24: 24px;
+    --spacing-32: 32px;
+    --spacing-40: 40px;
+    --spacing-48: 48px;
+    --spacing-60: 60px;
+    --spacing-64: 64px;
+    --spacing-80: 80px;
+    --spacing-100: 100px;
+    --spacing-200: 200px;
+    --spacing-300: 300px;
+    --spacing-400: 400px;
+
+    --font-size-xxs: 0.625rem; // 10px (10/16)
+    --font-size-xs: 0.75rem; // 12px (12/16)
+    --font-size-sm: 0.875rem; // 14px (14/16)
+    --font-size-md: 1rem; // 16px
+    --font-size-lg: 1.25rem; // 20px (20/16)
+    --font-size-xl: 1.5rem; // 24px
+    --font-size-xxl: 2rem; // 32px
+
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+}

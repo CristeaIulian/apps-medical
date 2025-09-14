@@ -1,0 +1,378 @@
+@use 'mixins' as *; // Import mixins
+@use 'variables' as *; // Import variables if needed
+
+// Import individual component styles
+@use '../../components/ChartView/ChartView';
+@use '../../components/AddResultsModal/AddResultsModal';
+
+// Import page styles
+@use '../../pages/Dashboard/Dashboard';
+@use '../../pages/AnalysisDetails/AnalysisDetails';
+@use '../../pages/Settings/Settings';
+
+@use 'mixins' as *; // This makes mixins available without prefix
+
+// Common component overrides for partials context
+.medical-app {
+    // Button overrides in partials context
+    .button {
+        &--medical-primary {
+            @include button-variant(var(--accent));
+        }
+
+        &--medical-success {
+            @include button-variant(var(--success));
+        }
+
+        &--medical-warning {
+            @include button-variant(var(--warning), var(--bg-primary));
+        }
+
+        &--medical-danger {
+            @include button-variant(var(--danger));
+        }
+    }
+
+    // Card overrides in partials context
+    .card {
+        &--medical {
+            @include medical-card();
+        }
+
+        &--medical-clickable {
+            @include medical-card($clickable: true);
+        }
+
+        &--medical-warning {
+            @include medical-card($clickable: false, $variant: 'warning');
+        }
+
+        &--medical-danger {
+            @include medical-card($clickable: false, $variant: 'danger');
+        }
+
+        &--medical-success {
+            @include medical-card($clickable: false, $variant: 'success');
+        }
+    }
+
+    // Input overrides
+    .input,
+    .input-text,
+    .input-number {
+        &--medical {
+            @include form-field;
+        }
+    }
+
+    // Dropdown overrides in partials context
+    .dropdown {
+        &--medical {
+            .dropdown__trigger {
+                @include form-field;
+            }
+
+            .dropdown__menu {
+                background: var(--bg-secondary);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                box-shadow: var(--medical-card-shadow);
+            }
+
+            .dropdown__option {
+                &:hover {
+                    background: var(--accent-quarter);
+                }
+
+                &--selected {
+                    background: var(--accent);
+                    color: var(--text-primary);
+                }
+            }
+        }
+    }
+
+    // Modal overrides
+    .modal {
+        &--medical {
+            .modal__overlay {
+                @include modal-overlay;
+            }
+
+            .modal__content {
+                background: var(--bg-secondary);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                box-shadow: var(--medical-modal-shadow);
+                max-height: 90vh;
+                overflow-y: auto;
+                @include custom-scrollbar;
+            }
+        }
+    }
+
+    // Toast overrides
+    .context-toast {
+        &--medical-success {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        &--medical-error {
+            background: var(--danger);
+            border-color: var(--danger);
+        }
+
+        &--medical-warning {
+            background: var(--warning);
+            border-color: var(--warning);
+            color: var(--bg-primary);
+        }
+    }
+
+    // Loading component overrides
+    .loading {
+        &--medical {
+            .loading__spinner {
+                @include loading-spinner(32px);
+            }
+        }
+    }
+}
+
+// Medical-specific component variants
+.medical-value {
+    font-weight: var(--font-weight-bold);
+
+    &--optimal {
+        color: var(--success);
+    }
+
+    &--high {
+        color: var(--danger);
+    }
+
+    &--low {
+        color: var(--warning);
+    }
+}
+
+.medical-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    font-size: var(--font-size-sm);
+
+    &--up {
+        color: var(--success);
+
+        &::before {
+            content: '↗️';
+        }
+    }
+
+    &--down {
+        color: var(--danger);
+
+        &::before {
+            content: '↘️';
+        }
+    }
+
+    &--stable {
+        color: var(--text-muted);
+
+        &::before {
+            content: '→';
+        }
+    }
+}
+
+.medical-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-2) var(--spacing-8);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+
+    &--category {
+        &-hematologie {
+            @include category-badge('hematologie');
+        }
+
+        &-lipide {
+            @include category-badge('lipide');
+        }
+
+        &-metabolic {
+            @include category-badge('metabolic');
+        }
+
+        &-hepatic {
+            @include category-badge('hepatic');
+        }
+
+        &-renal {
+            @include category-badge('renal');
+        }
+
+        &-hormonal {
+            @include category-badge('hormonal');
+        }
+    }
+
+    &--status {
+        &-optimal {
+            @include status-indicator('optimal');
+        }
+
+        &-high {
+            @include status-indicator('high');
+        }
+
+        &-low {
+            @include status-indicator('low');
+        }
+    }
+}
+
+// Chart container specific styling
+.chart-wrapper {
+    &--medical {
+        .chart-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+    }
+}
+
+// Table styling for partials data
+.medical-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-secondary);
+    border-radius: var(--radius);
+    overflow: hidden;
+
+    th,
+    td {
+        padding: var(--spacing-12) var(--spacing-16);
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+    }
+
+    th {
+        background: var(--bg-tertiary);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+        font-size: var(--font-size-sm);
+    }
+
+    td {
+        color: var(--text-secondary);
+
+        &--primary {
+            color: var(--text-primary);
+            font-weight: var(--font-weight-medium);
+        }
+
+        &--accent {
+            color: var(--accent);
+            font-weight: var(--font-weight-semibold);
+        }
+    }
+
+    tr {
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background: var(--bg-tertiary);
+        }
+
+        &:last-child {
+            td {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+// Form layouts for partials forms
+.medical-form {
+    &__group {
+        margin-bottom: var(--spacing-24);
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__label {
+        display: block;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-8);
+
+        &--required::after {
+            content: ' *';
+            color: var(--danger);
+        }
+    }
+
+    &__row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--spacing-16);
+
+        @include mobile-only {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--spacing-12);
+        margin-top: var(--spacing-24);
+        padding-top: var(--spacing-24);
+        border-top: 1px solid var(--border);
+
+        @include mobile-only {
+            flex-direction: column-reverse;
+
+            .button {
+                width: 100%;
+            }
+        }
+    }
+}
+
+// Responsive utilities for partials components
+@include mobile-only {
+    .mobile-hidden {
+        display: none !important;
+    }
+
+    .mobile-stack {
+        flex-direction: column !important;
+
+        > * {
+            width: 100% !important;
+        }
+    }
+}
+
+@include tablet-up {
+    .tablet-hidden {
+        display: none !important;
+    }
+}
+
+@include desktop-up {
+    .desktop-hidden {
+        display: none !important;
+    }
+}
