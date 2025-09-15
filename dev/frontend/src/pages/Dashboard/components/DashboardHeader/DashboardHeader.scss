@@ -1,0 +1,36 @@
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-32);
+    flex-wrap: wrap;
+    gap: var(--spacing-16);
+
+    &__title {
+        h1 {
+            font-size: var(--font-size-xxl);
+            font-weight: var(--font-weight-bold);
+            color: var(--text-primary);
+            margin: 0 0 var(--spacing-8) 0;
+        }
+
+        p {
+            color: var(--text-secondary);
+            font-size: var(--font-size-md);
+            margin: 0;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        gap: var(--spacing-12);
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

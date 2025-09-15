@@ -1,0 +1,37 @@
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-16);
+    margin-bottom: var(--spacing-32);
+
+    &__stat {
+        text-align: center;
+        padding: var(--spacing-24) !important;
+
+        h4 {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--text-secondary);
+            margin: 0 0 var(--spacing-8) 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    &__value {
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary);
+
+        &.warning {
+            color: var(--warning);
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .dashboard-stats {
+        grid-template-columns: 1fr;
+    }
+}

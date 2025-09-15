@@ -1,13 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import { Button, Card, Loading } from '@memobit/libs';
+import { Button, Loading } from '@memobit/libs';
 import { useNavigate } from 'react-router';
 
 import AddResultsModal from '@components/AddResultsModal/AddResultsModal';
 import { AppHeader } from '@components/AppHeader';
 import { filterAnalysisResultsByDate, getCategoriesMapById, getProblematicData, prepareDashboardData, shouldShowPeriodCards } from '@helpers/medicalHelpers';
+import { DashboardCategoryFilters } from '@pages/Dashboard/components/DashboardCategoryFilters';
+import { DashboardHeader } from '@pages/Dashboard/components/DashboardHeader';
 import { DashboardMiniCard } from '@pages/Dashboard/components/DashboardMiniCard';
 import { DashboardPeriod } from '@pages/Dashboard/components/DashboardPeriod';
+import { DashboardStats } from '@pages/Dashboard/components/DashboardStats';
 import { ProblematicValues } from '@pages/Dashboard/components/ProblematicValues';
 import { getStorageContent, getStorageDateFilter, updateStorageDateFilter, updateStorageFilterCategories } from '@pages/Dashboard/helpers/storage';
 
@@ -108,7 +111,6 @@ export const Dashboard: FC = () => {
         });
     };
 
-    // Funcție pentru actualizarea filtrului de dată cu persistență
     const handleDateFilterChange = (newDateFilter: DateFilter) => {
         setDateFilter(newDateFilter);
         updateStorageDateFilter(newDateFilter);
@@ -162,63 +164,24 @@ export const Dashboard: FC = () => {
         <>
             <AppHeader />
             <div className="dashboard">
-                {/* Header */}
-                <div className="dashboard__header">
-                    <div className="dashboard__title">
-                        <h1>Dashboard Medical</h1>
-                        <p>Monitorizarea analizelor medicale pe termen lung</p>
-                    </div>
-                    <div className="dashboard__actions">
-                        <Button variant="primary" onClick={() => setShowAddModal(true)}>
-                            + Adaugă Rezultate
-                        </Button>
-                    </div>
-                </div>
+                <DashboardHeader onAddResults={() => setShowAddModal(true)} />
 
-                {/* Category Filters */}
-                <div className="dashboard__filters">
-                    <h3>Categorii</h3>
-                    <div className="dashboard__category-filters">
-                        {categories.map(({ name: categoryName, id: categoryId }) => (
-                            <button
-                                key={categoryId}
-                                className={`dashboard__category-filter ${categoryFilters[categoryId] ? 'active' : ''}`}
-                                onClick={() => toggleCategoryFilter(categoryId)}
-                            >
-                                {categoryName}
-                                {dashboardData[categoryId]?.analysisResults.length > 0 && (
-                                    <span className="dashboard__category-count">{dashboardData[categoryId].analysisResults.length}</span>
-                                )}
-                            </button>
-                        ))}
-                    </div>
-                </div>
+                <DashboardCategoryFilters
+                    categories={categories}
+                    categoryFilters={categoryFilters}
+                    dashboardData={dashboardData}
+                    toggleCategoryFilter={toggleCategoryFilter}
+                />
 
                 <DashboardPeriod dateFilter={dateFilter} setDateFilter={handleDateFilterChange} analysisResults={analysisResults} />
 
-                {/* Quick Stats */}
-                <div className="dashboard__stats">
-                    <Card className="dashboard__stat">
-                        <h4>Total Analize</h4>
-                        <span className="dashboard__stat-value">
-                            {showPeriodCards && <span className="dashboard__stat-value">{filteredAnalysisResults.length} / </span>}
-                            {analysisResults.length}
-                        </span>
-                    </Card>
-
-                    <Card className="dashboard__stat">
-                        <h4>Total Valori Problematice</h4>
-                        <span className={`dashboard__stat-value ${problematicValues.length > 0 ? 'warning' : ''}`}>
-                            {showPeriodCards && (
-                                <span className={`dashboard__stat-value ${filteredProblematicValues.length > 0 ? 'warning' : ''}`}>
-                                    {filteredProblematicValues.length} /{' '}
-                                </span>
-                            )}
-
-                            {problematicValues.length}
-                        </span>
-                    </Card>
-                </div>
+                <DashboardStats
+                    analysisResults={analysisResults}
+                    problematicValues={problematicValues}
+                    filteredAnalysisResults={filteredAnalysisResults}
+                    filteredProblematicValues={filteredProblematicValues}
+                    showPeriodCards={showPeriodCards}
+                />
 
                 <DashboardMiniCard
                     analysisResults={analysisResults}
@@ -238,7 +201,7 @@ export const Dashboard: FC = () => {
                         isOpen={showAddModal}
                         onClose={() => setShowAddModal(false)}
                         onSuccess={() => {
-                            loadDashboardData(); // Refresh data după salvare
+                            loadDashboardData();
                             setShowAddModal(false);
                         }}
                     />
