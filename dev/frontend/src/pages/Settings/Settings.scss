@@ -105,6 +105,7 @@
         font-size: var(--font-size-sm);
         color: var(--text-secondary);
         text-align: center;
+        column-gap: var(--spacing-4);
 
         strong {
             color: var(--accent);

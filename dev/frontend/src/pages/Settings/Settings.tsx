@@ -343,13 +343,13 @@ const Settings: FC = () => {
                             </div>
 
                             <div className="settings__filter-results">
-                                Găsite: <strong> {filteredAnalysis.length}</strong> din {analysisList.length} analize
+                                <span>Găsite:</span> <strong> {filteredAnalysis.length}</strong> <span>din {analysisList.length} analize</span>
                             </div>
                         </div>
                     </Card>
                 </div>
 
-                {/* Analysys List */}
+                {/* Analysis List */}
                 <div className="settings__content">
                     <Card>
                         <h3>Tipuri de Analize ({filteredAnalysis.length})</h3>
@@ -385,15 +385,18 @@ const Settings: FC = () => {
                                                 </div>
 
                                                 <div className="settings__test-type-details">
-                                                    <div className="settings__detail">
-                                                        <span className="settings__detail-label">Unitate:</span>
-                                                        <span className="settings__detail-value">{a.unitName}</span>
-                                                    </div>
+                                                    {a.unitName && (
+                                                        <div className="settings__detail">
+                                                            <span className="settings__detail-label">Unitate:</span>
+                                                            <span className="settings__detail-value">{a.unitName}</span>
+                                                        </div>
+                                                    )}
+
                                                     {(a.optimalRangeMin || a.optimalRangeMax) && (
                                                         <div className="settings__detail">
                                                             <span className="settings__detail-label">Interval optim:</span>
                                                             <span className="settings__detail-value">
-                                                                {a.optimalRangeMin} - {a.optimalRangeMax} {a.unitName}
+                                                                {a.optimalRangeMin || 0} - {a.optimalRangeMax} {a.unitName}
                                                             </span>
                                                         </div>
                                                     )}
@@ -451,7 +454,7 @@ const Settings: FC = () => {
                                 </div>
 
                                 <div className="settings__form-group">
-                                    <label>Unitate măsură *</label>
+                                    <label>Unitate măsură</label>
                                     <InputText
                                         value={editModal.analysis.unitName || ''}
                                         onChange={value => updateEditModalField('unitName', value)}
@@ -462,7 +465,7 @@ const Settings: FC = () => {
 
                             <div className="settings__form-row">
                                 <div className="settings__form-group">
-                                    <label>Valoare minimă optimă *</label>
+                                    <label>Valoare minimă optimă</label>
                                     <InputNumber
                                         value={editModal.analysis.optimalRangeMin}
                                         onChange={value => updateOptimalRange('min', value)}
@@ -472,7 +475,7 @@ const Settings: FC = () => {
                                 </div>
 
                                 <div className="settings__form-group">
-                                    <label>Valoare maximă optimă *</label>
+                                    <label>Valoare maximă optimă</label>
                                     <InputNumber
                                         value={editModal.analysis.optimalRangeMax}
                                         onChange={value => updateOptimalRange('max', value)}
@@ -483,7 +486,7 @@ const Settings: FC = () => {
                             </div>
 
                             <div className="settings__form-group">
-                                <label>Referinta (pentru non-valori) *</label>
+                                <label>Referinta (pentru non-valori)</label>
                                 <InputText
                                     value={editModal.analysis.reference || ''}
                                     onChange={value => updateEditModalField('reference', value)}
