@@ -1,7 +1,7 @@
-import { DashboardData, DateFilter } from '@pages/Dashboard';
-import { ProblematicValuesData } from '@pages/Dashboard/components/ProblematicValues/ProblematicValues';
+import { DashboardData } from '@pages/Dashboard';
+import { ProblematicValuesData } from '@pages/Dashboard/components/ProblematicValues';
 
-import { AnalysisResults, CategoriesMapById, Category, Clinic, ClinicsMapById, OptimalRange } from '../types';
+import { AnalysisResults, CategoriesMapById, Category, DateFilter, OptimalRange } from '../types';
 
 /**
  * Determines if a test result value is within the optimal range
@@ -103,35 +103,7 @@ export const shouldShowPeriodCards = (dateFilter: DateFilter): boolean => {
     return true;
 };
 
-export const getPeriodLabel = (dateFilter: DateFilter): string => {
-    if (dateFilter.type === 'specific' && dateFilter.specificDate) {
-        return new Date(dateFilter.specificDate).toLocaleDateString('ro-RO', {
-            weekday: 'short',
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-        });
-    }
-
-    if (dateFilter.type === 'preset') {
-        switch (dateFilter.preset) {
-            case 'month':
-                return 'ULTIMELE 30 ZILE';
-            case '3months':
-                return 'ULTIMELE 3 LUNI';
-            case 'year':
-                return 'ULTIMUL AN';
-            default:
-                return 'PERIOADA SELECTATĂ';
-        }
-    }
-
-    return 'PERIOADA SELECTATĂ';
-};
-
 export const getCategoriesMapById = (categories: Category[]): CategoriesMapById => Object.fromEntries(categories.map(({ id, name }) => [id, { name }]));
-
-export const getClinicsMapById = (clinics: Clinic[]): ClinicsMapById => Object.fromEntries(clinics.map(({ id, name }) => [id, { name }]));
 
 export const getGroupedAnalysisItem = (analysisResults: AnalysisResults[]) => {
     const rs: AnalysisResults[] = [];

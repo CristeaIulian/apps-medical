@@ -1,1 +1,1 @@
-export { ProblematicValues } from './ProblematicValues';
+export { ProblematicValues, type ProblematicValuesData } from './ProblematicValues';

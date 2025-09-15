@@ -1,4 +1,4 @@
-import { DateFilter } from '@pages/Dashboard';
+import { DateFilter } from '../../../types';
 
 interface StorageContent {
     activeCategories: number[];

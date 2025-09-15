@@ -5,22 +5,14 @@ import { useNavigate } from 'react-router';
 
 import AddResultsModal from '@components/AddResultsModal/AddResultsModal';
 import { AppHeader } from '@components/AppHeader';
-import {
-    filterAnalysisResultsByDate,
-    getCategoriesMapById,
-    getClinicsMapById,
-    getPeriodLabel,
-    getProblematicData,
-    prepareDashboardData,
-    shouldShowPeriodCards,
-} from '@helpers/medicalHelpers';
+import { filterAnalysisResultsByDate, getCategoriesMapById, getProblematicData, prepareDashboardData, shouldShowPeriodCards } from '@helpers/medicalHelpers';
 import { DashboardMiniCard } from '@pages/Dashboard/components/DashboardMiniCard';
 import { DashboardPeriod } from '@pages/Dashboard/components/DashboardPeriod';
 import { ProblematicValues } from '@pages/Dashboard/components/ProblematicValues';
 import { getStorageContent, getStorageDateFilter, updateStorageDateFilter, updateStorageFilterCategories } from '@pages/Dashboard/helpers/storage';
 
 import { loadAnalysisList, loadAnalysisResults, loadCategories, loadClinics } from '../../services/api';
-import { Analysis, AnalysisResults, CategoriesMapById, Category, Clinic, ClinicsMapById } from '../../types';
+import { Analysis, AnalysisResults, CategoriesMapById, Category, CategoryFilter, Clinic, DateFilter } from '../../types';
 
 import './Dashboard.scss';
 
@@ -29,16 +21,6 @@ export type DashboardData = {
         analysisResults: AnalysisResults[];
     };
 };
-
-export interface CategoryFilter {
-    [key: string]: boolean;
-}
-
-export interface DateFilter {
-    type: 'preset' | 'specific';
-    preset?: string;
-    specificDate?: string;
-}
 
 const storageContent = getStorageContent();
 
@@ -55,7 +37,6 @@ export const Dashboard: FC = () => {
     const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
     const [categoriesById, setCategoriesById] = useState<CategoriesMapById>({});
-    const [clinicsById, setClinicsById] = useState<ClinicsMapById>({});
     const [analysis, setAnalysis] = useState<Analysis[]>([]);
     const [clinics, setClinics] = useState<Clinic[]>([]);
     const [analysisResults, setAnalysisResults] = useState<AnalysisResults[]>([]);
@@ -91,7 +72,6 @@ export const Dashboard: FC = () => {
 
             if (clinicsResponse.success) {
                 setClinics(clinicsResponse.data);
-                setClinicsById(getClinicsMapById(clinicsResponse.data));
             } else {
                 setError(clinicsResponse.error);
             }
@@ -177,7 +157,6 @@ export const Dashboard: FC = () => {
     const filteredAnalysisResults = filterAnalysisResultsByDate(analysisResults, dateFilter);
     const filteredProblematicValues = getProblematicData(filteredAnalysisResults);
     const showPeriodCards = shouldShowPeriodCards(dateFilter);
-    const periodLabel = getPeriodLabel(dateFilter);
 
     return (
         <>

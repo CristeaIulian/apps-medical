@@ -4,8 +4,7 @@ import { ChartCard } from '@components/ChartCard';
 import { ChartDataPoint, ChartView } from '@components/ChartView';
 import { getAnalysisType, getGroupedAnalysisItem, getReferenceStatus, getValueStatus } from '@helpers/medicalHelpers';
 
-import { AnalysisResults, CategoriesMapById } from '../../../../types';
-import { CategoryFilter, DateFilter } from '../../Dashboard';
+import { AnalysisResults, CategoriesMapById, CategoryFilter, DateFilter } from '../../../../types';
 
 interface DashboardMiniCardProps {
     analysisResults: AnalysisResults[];

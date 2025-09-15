@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Dropdown, DropdownOption } from '@memobit/libs';
 
-import { DateFilter } from '@pages/Dashboard/Dashboard';
-
-import { AnalysisResults } from '../../../../types';
+import { AnalysisResults, DateFilter } from '../../../../types';
 
 import './DashboardPeriod.scss';
 

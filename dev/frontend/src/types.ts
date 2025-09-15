@@ -36,7 +36,6 @@ export interface Category {
 }
 
 export type CategoriesMapById = Record<number, { name: string }>;
-export type ClinicsMapById = Record<number, { name: string }>;
 
 export interface Clinic {
     uid: number;
@@ -68,4 +67,14 @@ export interface AnalysisResultSaveDTO {
 export interface OptimalRange {
     min?: number;
     max?: number;
+}
+
+export interface CategoryFilter {
+    [key: string]: boolean;
+}
+
+export interface DateFilter {
+    type: 'preset' | 'specific';
+    preset?: string;
+    specificDate?: string;
 }
