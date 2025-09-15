@@ -9,7 +9,7 @@ import { getCategoriesMapById, getClinicsMapById, getProblematicData, prepareDas
 import { DashboardMiniCard } from '@pages/Dashboard/components/DashboardMiniCard';
 import { DashboardPeriod } from '@pages/Dashboard/components/DashboardPeriod';
 import { ProblematicValues } from '@pages/Dashboard/components/ProblematicValues';
-import { getStorageContent, updateStorageFilterCategories } from '@pages/Dashboard/helpers/storage';
+import { getStorageContent, getStorageDateFilter, updateStorageDateFilter, updateStorageFilterCategories } from '@pages/Dashboard/helpers/storage';
 
 import { loadAnalysisList, loadAnalysisResults, loadCategories, loadClinics } from '../../services/api';
 import { Analysis, AnalysisResults, CategoriesMapById, Category, Clinic, ClinicsMapById } from '../../types';
@@ -55,10 +55,7 @@ export const Dashboard: FC = () => {
     const [error, setError] = useState<string>('');
     const [categoryFilters, setCategoryFilters] = useState<CategoryFilter>(getCategoriesFiltersFromStorage);
     const [showAddModal, setShowAddModal] = useState(false);
-    const [dateFilter, setDateFilter] = useState<DateFilter>({
-        type: 'preset',
-        preset: 'all',
-    });
+    const [dateFilter, setDateFilter] = useState<DateFilter>(getStorageDateFilter());
 
     const loadDashboardData = async () => {
         try {
@@ -121,6 +118,12 @@ export const Dashboard: FC = () => {
                 [categoryId]: !prev[categoryId],
             };
         });
+    };
+
+    // Funcție pentru actualizarea filtrului de dată cu persistență
+    const handleDateFilterChange = (newDateFilter: DateFilter) => {
+        setDateFilter(newDateFilter);
+        updateStorageDateFilter(newDateFilter);
     };
 
     const onChartClick = (analysisId: number): void => {
@@ -200,7 +203,7 @@ export const Dashboard: FC = () => {
                     </div>
                 </div>
 
-                <DashboardPeriod dateFilter={dateFilter} setDateFilter={setDateFilter} analysisResults={analysisResults} />
+                <DashboardPeriod dateFilter={dateFilter} setDateFilter={handleDateFilterChange} analysisResults={analysisResults} />
 
                 {/* Quick Stats */}
                 <div className="dashboard__stats">

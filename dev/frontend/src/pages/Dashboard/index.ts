@@ -1,1 +1,1 @@
-export { Dashboard } from './Dashboard';
+export { Dashboard, type DateFilter } from './Dashboard';
