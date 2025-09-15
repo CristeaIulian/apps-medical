@@ -6,7 +6,7 @@ import { getAnalysisType, getGroupedAnalysisItem, getReferenceStatus, getValueSt
 
 import { AnalysisResults, CategoriesMapById, CategoryFilter, DateFilter } from '../../../../types';
 
-interface DashboardMiniCardProps {
+interface DashboardMiniCardsProps {
     analysisResults: AnalysisResults[];
     categoriesById: CategoriesMapById;
     categoryFilters: CategoryFilter;
@@ -15,14 +15,14 @@ interface DashboardMiniCardProps {
     onChartClick?: (analysisId: number) => void;
 }
 
-export const DashboardMiniCard: FC<DashboardMiniCardProps> = ({
+export const DashboardMiniCards: FC<DashboardMiniCardsProps> = ({
     analysisResults,
     categoriesById,
     categoryFilters,
     dataCategories,
     dateFilter,
     onChartClick,
-}) => {
+}: DashboardMiniCardsProps) => {
     // Funcție pentru filtrarea rezultatelor
     const getFilteredResults = (): AnalysisResults[] => {
         if (dateFilter.type === 'preset' && dateFilter.preset === 'all') {

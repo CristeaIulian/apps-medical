@@ -8,11 +8,20 @@ import { AppHeader } from '@components/AppHeader';
 import { filterAnalysisResultsByDate, getCategoriesMapById, getProblematicData, prepareDashboardData, shouldShowPeriodCards } from '@helpers/medicalHelpers';
 import { DashboardCategoryFilters } from '@pages/Dashboard/components/DashboardCategoryFilters';
 import { DashboardHeader } from '@pages/Dashboard/components/DashboardHeader';
-import { DashboardMiniCard } from '@pages/Dashboard/components/DashboardMiniCard';
+import { DashboardListView } from '@pages/Dashboard/components/DashboardListView';
+import { DashboardMiniCards } from '@pages/Dashboard/components/DashboardMiniCards';
 import { DashboardPeriod } from '@pages/Dashboard/components/DashboardPeriod';
 import { DashboardStats } from '@pages/Dashboard/components/DashboardStats';
 import { ProblematicValues } from '@pages/Dashboard/components/ProblematicValues';
-import { getStorageContent, getStorageDateFilter, updateStorageDateFilter, updateStorageFilterCategories } from '@pages/Dashboard/helpers/storage';
+import {
+    getStorageContent,
+    getStorageDateFilter,
+    getStorageViewMode,
+    updateStorageDateFilter,
+    updateStorageFilterCategories,
+    updateStorageViewMode,
+    ViewMode,
+} from '@pages/Dashboard/helpers/storage';
 
 import { loadAnalysisList, loadAnalysisResults, loadCategories, loadClinics } from '../../services/api';
 import { Analysis, AnalysisResults, CategoriesMapById, Category, CategoryFilter, Clinic, DateFilter } from '../../types';
@@ -48,6 +57,7 @@ export const Dashboard: FC = () => {
     const [categoryFilters, setCategoryFilters] = useState<CategoryFilter>(getCategoriesFiltersFromStorage);
     const [showAddModal, setShowAddModal] = useState(false);
     const [dateFilter, setDateFilter] = useState<DateFilter>(getStorageDateFilter());
+    const [viewMode, setViewMode] = useState<ViewMode>(getStorageViewMode());
 
     const loadDashboardData = async () => {
         try {
@@ -90,7 +100,7 @@ export const Dashboard: FC = () => {
             setDashboardData(preparedDashboardData);
         } catch (err) {
             setError('Eroare la încărcarea datelor');
-            console.error('DashboardMiniCard loading error:', err);
+            console.error('DashboardMiniCards loading error:', err);
         } finally {
             setLoading(false);
         }
@@ -114,6 +124,11 @@ export const Dashboard: FC = () => {
     const handleDateFilterChange = (newDateFilter: DateFilter) => {
         setDateFilter(newDateFilter);
         updateStorageDateFilter(newDateFilter);
+    };
+
+    const handleViewModeChange = (newViewMode: ViewMode) => {
+        setViewMode(newViewMode);
+        updateStorageViewMode(newViewMode);
     };
 
     const onChartClick = (analysisId: number): void => {
@@ -164,7 +179,7 @@ export const Dashboard: FC = () => {
         <>
             <AppHeader />
             <div className="dashboard">
-                <DashboardHeader onAddResults={() => setShowAddModal(true)} />
+                <DashboardHeader onAddResults={() => setShowAddModal(true)} viewMode={viewMode} onViewModeChange={handleViewModeChange} />
 
                 <DashboardCategoryFilters
                     categories={categories}
@@ -183,14 +198,25 @@ export const Dashboard: FC = () => {
                     showPeriodCards={showPeriodCards}
                 />
 
-                <DashboardMiniCard
-                    analysisResults={analysisResults}
-                    categoriesById={categoriesById}
-                    categoryFilters={categoryFilters}
-                    dataCategories={dashboardData}
-                    dateFilter={dateFilter}
-                    onChartClick={onChartClick}
-                />
+                {viewMode === 'cards' ? (
+                    <DashboardMiniCards
+                        analysisResults={analysisResults}
+                        categoriesById={categoriesById}
+                        categoryFilters={categoryFilters}
+                        dataCategories={dashboardData}
+                        dateFilter={dateFilter}
+                        onChartClick={onChartClick}
+                    />
+                ) : (
+                    <DashboardListView
+                        analysisResults={analysisResults}
+                        categoriesById={categoriesById}
+                        categoryFilters={categoryFilters}
+                        dataCategories={dashboardData}
+                        dateFilter={dateFilter}
+                        onAnalysisClick={onChartClick}
+                    />
+                )}
 
                 <ProblematicValues problematicValues={problematicValues} />
 
