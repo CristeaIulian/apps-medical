@@ -5,7 +5,15 @@ import { useNavigate } from 'react-router';
 
 import AddResultsModal from '@components/AddResultsModal/AddResultsModal';
 import { AppHeader } from '@components/AppHeader';
-import { getCategoriesMapById, getClinicsMapById, getProblematicData, prepareDashboardData } from '@helpers/medicalHelpers';
+import {
+    filterAnalysisResultsByDate,
+    getCategoriesMapById,
+    getClinicsMapById,
+    getPeriodLabel,
+    getProblematicData,
+    prepareDashboardData,
+    shouldShowPeriodCards,
+} from '@helpers/medicalHelpers';
 import { DashboardMiniCard } from '@pages/Dashboard/components/DashboardMiniCard';
 import { DashboardPeriod } from '@pages/Dashboard/components/DashboardPeriod';
 import { ProblematicValues } from '@pages/Dashboard/components/ProblematicValues';
@@ -166,6 +174,10 @@ export const Dashboard: FC = () => {
     }
 
     const problematicValues = getProblematicData(analysisResults);
+    const filteredAnalysisResults = filterAnalysisResultsByDate(analysisResults, dateFilter);
+    const filteredProblematicValues = getProblematicData(filteredAnalysisResults);
+    const showPeriodCards = shouldShowPeriodCards(dateFilter);
+    const periodLabel = getPeriodLabel(dateFilter);
 
     return (
         <>
@@ -209,11 +221,23 @@ export const Dashboard: FC = () => {
                 <div className="dashboard__stats">
                     <Card className="dashboard__stat">
                         <h4>Total Analize</h4>
-                        <span className="dashboard__stat-value">{analysisResults.length}</span>
+                        <span className="dashboard__stat-value">
+                            {showPeriodCards && <span className="dashboard__stat-value">{filteredAnalysisResults.length} / </span>}
+                            {analysisResults.length}
+                        </span>
                     </Card>
+
                     <Card className="dashboard__stat">
-                        <h4>Valori Problematice</h4>
-                        <span className={`dashboard__stat-value ${problematicValues.length > 0 ? 'warning' : ''}`}>{problematicValues.length}</span>
+                        <h4>Total Valori Problematice</h4>
+                        <span className={`dashboard__stat-value ${problematicValues.length > 0 ? 'warning' : ''}`}>
+                            {showPeriodCards && (
+                                <span className={`dashboard__stat-value ${filteredProblematicValues.length > 0 ? 'warning' : ''}`}>
+                                    {filteredProblematicValues.length} /{' '}
+                                </span>
+                            )}
+
+                            {problematicValues.length}
+                        </span>
                     </Card>
                 </div>
 

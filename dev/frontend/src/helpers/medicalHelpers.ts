@@ -1,5 +1,5 @@
+import { DashboardData, DateFilter } from '@pages/Dashboard';
 import { ProblematicValuesData } from '@pages/Dashboard/components/ProblematicValues/ProblematicValues';
-import { DashboardData } from '@pages/Dashboard/Dashboard';
 
 import { AnalysisResults, CategoriesMapById, Category, Clinic, ClinicsMapById, OptimalRange } from '../types';
 
@@ -51,6 +51,82 @@ export const getProblematicData = (analysisResults: AnalysisResults[]): Problema
             return null;
         })
         .filter(item => item !== null) as any[];
+};
+
+export const filterAnalysisResultsByDate = (analysisResults: AnalysisResults[], dateFilter: DateFilter): AnalysisResults[] => {
+    if (dateFilter.type === 'preset' && (dateFilter.preset === 'all' || !dateFilter.preset)) {
+        return analysisResults;
+    }
+
+    const now = new Date();
+    let filterDate: Date;
+
+    if (dateFilter.type === 'specific' && dateFilter.specificDate) {
+        // Pentru data specifică, returnăm doar rezultatele din acea zi
+        return analysisResults.filter(result => {
+            const resultDate = new Date(result.date).toISOString().split('T')[0];
+            return resultDate === dateFilter.specificDate;
+        });
+    }
+
+    if (dateFilter.type === 'preset') {
+        switch (dateFilter.preset) {
+            case 'month':
+                filterDate = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+                break;
+            case '3months':
+                filterDate = new Date(now.getFullYear(), now.getMonth() - 3, now.getDate());
+                break;
+            case 'year':
+                filterDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+                break;
+            default:
+                return analysisResults;
+        }
+
+        return analysisResults.filter(result => new Date(result.date) >= filterDate);
+    }
+
+    return analysisResults;
+};
+
+export const shouldShowPeriodCards = (dateFilter: DateFilter): boolean => {
+    // Afișăm cardurile pentru perioada doar dacă nu e "toate datele" și avem o selecție validă
+    if (dateFilter.type === 'preset' && (dateFilter.preset === 'all' || !dateFilter.preset)) {
+        return false;
+    }
+
+    if (dateFilter.type === 'specific' && !dateFilter.specificDate) {
+        return false;
+    }
+
+    return true;
+};
+
+export const getPeriodLabel = (dateFilter: DateFilter): string => {
+    if (dateFilter.type === 'specific' && dateFilter.specificDate) {
+        return new Date(dateFilter.specificDate).toLocaleDateString('ro-RO', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+        });
+    }
+
+    if (dateFilter.type === 'preset') {
+        switch (dateFilter.preset) {
+            case 'month':
+                return 'ULTIMELE 30 ZILE';
+            case '3months':
+                return 'ULTIMELE 3 LUNI';
+            case 'year':
+                return 'ULTIMUL AN';
+            default:
+                return 'PERIOADA SELECTATĂ';
+        }
+    }
+
+    return 'PERIOADA SELECTATĂ';
 };
 
 export const getCategoriesMapById = (categories: Category[]): CategoriesMapById => Object.fromEntries(categories.map(({ id, name }) => [id, { name }]));
