@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Button, Card, ConfirmDialog, InputNumber, Loading, Modal, Toast } from '@memobit/libs';
+import { Button, Card, ConfirmDialog, Loading, Toast } from '@memobit/libs';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ import { ChartCard } from '@components/ChartCard';
 import { ChartDataPoint, ChartView } from '@components/ChartView';
 import { getAnalysisType } from '@helpers/medicalHelpers';
 
-import { deleteAnalysisResult, loadAnalysisResultsByType, updateOptimalRange } from '../../services/api';
+import { deleteAnalysisResult, loadAnalysisResultsByType } from '../../services/api';
 import { AnalysisResults } from '../../types';
 
 import './AnalysisDetails.scss';
@@ -18,12 +18,6 @@ interface DateRange {
     start: string;
     end: string;
     label: string;
-}
-
-interface EditRangeModalState {
-    isOpen: boolean;
-    min?: number;
-    max?: number;
 }
 
 interface DeleteConfirmState {
@@ -43,11 +37,6 @@ const AnalysisDetails: FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>('');
     const [selectedDateRange, setSelectedDateRange] = useState<DateRange | null>(null);
-    const [editRangeModal, setEditRangeModal] = useState<EditRangeModalState>({
-        isOpen: false,
-        min: 0,
-        max: 0,
-    });
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [deleteConfirm, setDeleteConfirm] = useState<DeleteConfirmState>({
         isOpen: false,
@@ -194,47 +183,6 @@ const AnalysisDetails: FC = () => {
         return 'optimal';
     };
 
-    const handleEditRange = () => {
-        if (analysisByTypeDetails) {
-            setEditRangeModal({
-                isOpen: true,
-                min: analysisByTypeDetails.optimalRangeMin,
-                max: analysisByTypeDetails.optimalRangeMax,
-            });
-        }
-    };
-
-    const handleSaveRange = async () => {
-        if (!analysisByTypeDetails) return;
-
-        try {
-            const response = await updateOptimalRange(analysisByTypeDetails.analysisId, editRangeModal.min, editRangeModal.max);
-
-            if (response.success) {
-                setAnalysisByTypeDetails({
-                    ...analysisByTypeDetails,
-                    optimalRangeMin: editRangeModal.min,
-                    optimalRangeMax: editRangeModal.max,
-                });
-                setEditRangeModal({ ...editRangeModal, isOpen: false });
-                setToast({
-                    message: 'Intervalul optim a fost actualizat',
-                    type: 'success',
-                });
-            } else {
-                setToast({
-                    message: response.error || 'Eroare la actualizarea intervalului',
-                    type: 'error',
-                });
-            }
-        } catch (err) {
-            setToast({
-                message: 'Eroare la actualizarea intervalului',
-                type: 'error',
-            });
-        }
-    };
-
     const handleDeleteResult = (resultId: number) => {
         // Găsește rezultatul pentru detalii în confirm dialog
         const result = filteredResults.find(r => r.analysisId === resultId);
@@ -322,9 +270,6 @@ const AnalysisDetails: FC = () => {
                             <h1>{analysisByTypeDetails.analysisName}</h1>
                             <p>Istoric complet al analizei</p>
                         </div>
-                    </div>
-                    <div className="test-details__header-right">
-                        <Button onClick={handleEditRange}>Editează interval optim</Button>
                     </div>
                 </div>
 
@@ -496,50 +441,6 @@ const AnalysisDetails: FC = () => {
                         )}
                     </Card>
                 </div>
-
-                {/* Edit Range Modal */}
-                {editRangeModal.isOpen && (
-                    <Modal onClose={() => setEditRangeModal({ ...editRangeModal, isOpen: false })} title="Editează intervalul optim" size="small">
-                        <div className="test-details__edit-range">
-                            <p>
-                                Definește intervalul optim pentru <strong>{analysisByTypeDetails.analysisName}</strong>:
-                            </p>
-
-                            <div className="test-details__range-inputs">
-                                <div className="test-details__range-input">
-                                    <label>Valoare minimă:</label>
-                                    <InputNumber
-                                        value={editRangeModal.min}
-                                        onChange={value => setEditRangeModal(prev => ({ ...prev, min: value }))}
-                                        step={0.1}
-                                        min={0}
-                                    />
-                                    <span>{analysisByTypeDetails.unitName}</span>
-                                </div>
-
-                                <div className="test-details__range-input">
-                                    <label>Valoare maximă:</label>
-                                    <InputNumber
-                                        value={editRangeModal.max}
-                                        onChange={value => setEditRangeModal(prev => ({ ...prev, max: value }))}
-                                        step={0.1}
-                                        min={editRangeModal.min}
-                                    />
-                                    <span>{analysisByTypeDetails.unitName}</span>
-                                </div>
-                            </div>
-
-                            <div className="test-details__range-actions">
-                                <Button variant="secondary" onClick={() => setEditRangeModal({ ...editRangeModal, isOpen: false })}>
-                                    Anulează
-                                </Button>
-                                <Button variant="primary" onClick={handleSaveRange} disabled={(editRangeModal.min || 0) >= (editRangeModal.max || 0)}>
-                                    Salvează
-                                </Button>
-                            </div>
-                        </div>
-                    </Modal>
-                )}
 
                 {/* Toast notifications */}
                 {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}

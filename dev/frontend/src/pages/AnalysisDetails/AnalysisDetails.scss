@@ -314,52 +314,6 @@
         display: flex;
         justify-content: center;
     }
-
-    // Edit Range Modal
-    &__edit-range {
-        text-align: left;
-        padding: var(--spacing-16);
-
-        p {
-            margin-bottom: var(--spacing-24);
-            color: var(--text-secondary);
-        }
-    }
-
-    &__range-inputs {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-16);
-        margin-bottom: var(--spacing-32);
-    }
-
-    &__range-input {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-12);
-
-        label {
-            font-weight: var(--font-weight-medium);
-            color: var(--text-primary);
-            min-width: 120px;
-        }
-
-        input {
-            flex: 1;
-        }
-
-        span {
-            font-size: var(--font-size-sm);
-            color: var(--text-muted);
-            min-width: 40px;
-        }
-    }
-
-    &__range-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: var(--spacing-12);
-    }
 }
 
 // Responsive design
@@ -597,10 +551,6 @@
 
         &__stat-value,
         &__table-status {
-            border-width: 2px;
-        }
-
-        &__optimal-range {
             border-width: 2px;
         }
     }

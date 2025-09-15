@@ -62,9 +62,6 @@ export const updateAnalysis = async (id: number, analysisSave: AnalysisSaveDTO):
 
 export const deleteAnalysis = async (id: number): Promise<ResponseDelete> => await getApiCall(`analysis/delete/${id}`);
 
-export const updateOptimalRange = async (analysisId: number, optimalRangeMin?: number, optimalRangeMax?: number): Promise<ResponseCreate> =>
-    await postApiCall(`analysis/updateOptimalRange/${analysisId}`, { optimalRangeMin, optimalRangeMax });
-
 // Analysis Results
 export const loadAnalysisResults = async (): Promise<ApiCallListAnalysisResultsReturn> => await getApiCall('analysisLog');
 

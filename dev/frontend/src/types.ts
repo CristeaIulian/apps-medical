@@ -22,8 +22,8 @@ export interface AnalysisResults {
     analysisLogId: number;
     optimalRangeMax?: number;
     optimalRangeMin?: number;
-    unitId: number;
-    unitName: string;
+    unitId?: number;
+    unitName?: string;
     notes?: string;
     userReference?: string;
     optimalReference?: string;

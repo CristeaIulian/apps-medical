@@ -17,13 +17,13 @@ export const AppHeader: FC = () => {
             </div>
             <div className="appHeader-right">
                 {pathname !== '/' && (
-                    <Button variant="secondary" size="small" onClick={() => navigate('/')}>
+                    <Button variant="secondary" onClick={() => navigate('/')}>
                         ← Dashboard
                     </Button>
                 )}
-                {pathname === '/' && (
+                {pathname !== '/settings' && (
                     <Button variant="secondary" onClick={() => navigate('/settings')}>
-                        ⚙️ Lista analize
+                        🔬 Lista analize
                     </Button>
                 )}
             </div>

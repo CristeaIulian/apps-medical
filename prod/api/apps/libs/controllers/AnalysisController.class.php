@@ -50,38 +50,30 @@ class AnalysisController extends BaseController {
         $this->output(['success' => true, 'message' => 'Analysis saved successfully', 'id' => $analysisId]);
     }
 
-    public function update() {
-    die('not implemented I think');
+    public function update($route) {
         $postObject = $this->post;
 
-        $fields = ['id', 'analysisName', 'categoryId', 'unitId', 'optimalRangeMin', 'optimalRangeMax', 'reference'];
+        $fields = ['analysisName', 'categoryId', 'unitId', 'optimalRangeMin', 'optimalRangeMax', 'reference'];
 
-        $unitId = $postObject['unitId'];
 
-        if (!$unitId) {
+        $unitId = isset($postObject['unitId']) ? $postObject['unitId'] : null;
+
+        // try getting potential saved unitId
+        if (!$unitId && isset($postObject['unitName'])) {
+            $this->orm->columns("id");
+            $this->orm->where("name = '" . $this->orm->secureValue($postObject['unitName']) . "'");
+            $result = $this->orm->get_row('medical_units');
+
+            if ($result) {
+               $unitId = $result['id'];
+            }
+        }
+
+        if (!$unitId && isset($postObject['unitName'])) {
             $unitId = $this->orm->insert('medical_units', $this->build_array( ["name" => $postObject["unitName"]], ['name'] ));
         }
 
-        if (!$unitId) {
-            $this->output(['error' => true, 'message' => 'New unit could not be saved', 'id' => $unitId]);
-            die;
-        }
-
         $postObject['unitId'] = $unitId;
-
-        $analysisId = [];
-
-        $this->orm->where('id = ' . $this->orm->secureValue($this->post['id']));
-
-        $this->orm->update('medical_analysis',  $this->build_array( $postObject, $fields ));
-
-        $this->output(['success' => true, 'message' => 'Analysis updated successfully', 'id' => $analysisId]);
-    }
-
-    public function updateOptimalRange($route) {
-        $postObject = $this->post;
-
-        $fields = ['optimalRangeMin', 'optimalRangeMax'];
 
         $analysisId = [];
 
@@ -89,7 +81,7 @@ class AnalysisController extends BaseController {
 
         $this->orm->update('medical_analysis',  $this->build_array( $postObject, $fields ));
 
-        $this->output(['success' => true, 'message' => 'Analysis range updated successfully']);
+        $this->output(['success' => true, 'message' => 'Analysis updated successfully']);
     }
 
     public function delete($route) {

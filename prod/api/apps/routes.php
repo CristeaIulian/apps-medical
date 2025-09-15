@@ -4,8 +4,7 @@ $routes = [
     "/^\/api\/(analysis)$/",
     "/^\/api\/(analysis)\/(getAnalysisList)$/",
     "/^\/api\/(analysis)\/(add)$/",
-    "/^\/api\/(analysis)\/(update)$/",
-    "/^\/api\/(analysis)\/(updateOptimalRange)\/(\d+)$/",
+    "/^\/api\/(analysis)\/(update)\/(\d+)$/",
 
     "/^\/api\/(analysis)\/(delete)\/(\d+)$/",
 
