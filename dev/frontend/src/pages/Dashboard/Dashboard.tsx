@@ -5,20 +5,29 @@ import { useNavigate } from 'react-router';
 
 import AddResultsModal from '@components/AddResultsModal/AddResultsModal';
 import { AppHeader } from '@components/AppHeader';
-import { filterAnalysisResultsByDate, getCategoriesMapById, getProblematicData, prepareDashboardData, shouldShowPeriodCards } from '@helpers/medicalHelpers';
+import {
+    filterAnalysisResultsByDate,
+    filterResultsByProblematic,
+    getCategoriesMapById,
+    getProblematicCount,
+    prepareDashboardData,
+    shouldShowPeriodCards,
+} from '@helpers/medicalHelpers';
 import { DashboardCategoryFilters } from '@pages/Dashboard/components/DashboardCategoryFilters';
 import { DashboardHeader } from '@pages/Dashboard/components/DashboardHeader';
 import { DashboardListView } from '@pages/Dashboard/components/DashboardListView';
 import { DashboardMiniCards } from '@pages/Dashboard/components/DashboardMiniCards';
 import { DashboardPeriod } from '@pages/Dashboard/components/DashboardPeriod';
 import { DashboardStats } from '@pages/Dashboard/components/DashboardStats';
-import { ProblematicValues } from '@pages/Dashboard/components/ProblematicValues';
 import {
     getStorageContent,
     getStorageDateFilter,
+    getStorageResultFilter,
     getStorageViewMode,
+    ResultFilter,
     updateStorageDateFilter,
     updateStorageFilterCategories,
+    updateStorageResultFilter,
     updateStorageViewMode,
     ViewMode,
 } from '@pages/Dashboard/helpers/storage';
@@ -58,6 +67,7 @@ export const Dashboard: FC = () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [dateFilter, setDateFilter] = useState<DateFilter>(getStorageDateFilter());
     const [viewMode, setViewMode] = useState<ViewMode>(getStorageViewMode());
+    const [resultFilter, setResultFilter] = useState<ResultFilter>(getStorageResultFilter());
 
     const loadDashboardData = async () => {
         try {
@@ -100,7 +110,7 @@ export const Dashboard: FC = () => {
             setDashboardData(preparedDashboardData);
         } catch (err) {
             setError('Eroare la încărcarea datelor');
-            console.error('DashboardMiniCards loading error:', err);
+            console.error('DashboardMiniCard loading error:', err);
         } finally {
             setLoading(false);
         }
@@ -129,6 +139,11 @@ export const Dashboard: FC = () => {
     const handleViewModeChange = (newViewMode: ViewMode) => {
         setViewMode(newViewMode);
         updateStorageViewMode(newViewMode);
+    };
+
+    const handleResultFilterChange = (newResultFilter: ResultFilter) => {
+        setResultFilter(newResultFilter);
+        updateStorageResultFilter(newResultFilter);
     };
 
     const onChartClick = (analysisId: number): void => {
@@ -170,16 +185,23 @@ export const Dashboard: FC = () => {
         );
     }
 
-    const problematicValues = getProblematicData(analysisResults);
+    const problematicValuesLength = getProblematicCount(analysisResults);
     const filteredAnalysisResults = filterAnalysisResultsByDate(analysisResults, dateFilter);
-    const filteredProblematicValues = getProblematicData(filteredAnalysisResults);
+    const finalFilteredResults = filterResultsByProblematic(filteredAnalysisResults, resultFilter);
+    const filteredProblematicValuesLength = getProblematicCount(finalFilteredResults);
     const showPeriodCards = shouldShowPeriodCards(dateFilter);
 
     return (
         <>
             <AppHeader />
             <div className="dashboard">
-                <DashboardHeader onAddResults={() => setShowAddModal(true)} viewMode={viewMode} onViewModeChange={handleViewModeChange} />
+                <DashboardHeader
+                    onAddResults={() => setShowAddModal(true)}
+                    viewMode={viewMode}
+                    onViewModeChange={handleViewModeChange}
+                    resultFilter={resultFilter}
+                    onResultFilterChange={handleResultFilterChange}
+                />
 
                 <DashboardCategoryFilters
                     categories={categories}
@@ -192,9 +214,9 @@ export const Dashboard: FC = () => {
 
                 <DashboardStats
                     analysisResults={analysisResults}
-                    problematicValues={problematicValues}
+                    problematicValuesLength={problematicValuesLength}
                     filteredAnalysisResults={filteredAnalysisResults}
-                    filteredProblematicValues={filteredProblematicValues}
+                    filteredProblematicValuesLength={filteredProblematicValuesLength}
                     showPeriodCards={showPeriodCards}
                 />
 
@@ -205,6 +227,7 @@ export const Dashboard: FC = () => {
                         categoryFilters={categoryFilters}
                         dataCategories={dashboardData}
                         dateFilter={dateFilter}
+                        resultFilter={resultFilter}
                         onChartClick={onChartClick}
                     />
                 ) : (
@@ -214,11 +237,10 @@ export const Dashboard: FC = () => {
                         categoryFilters={categoryFilters}
                         dataCategories={dashboardData}
                         dateFilter={dateFilter}
+                        resultFilter={resultFilter}
                         onAnalysisClick={onChartClick}
                     />
                 )}
-
-                <ProblematicValues problematicValues={problematicValues} />
 
                 {showAddModal && (
                     <AddResultsModal

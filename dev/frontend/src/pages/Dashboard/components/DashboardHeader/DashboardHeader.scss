@@ -27,7 +27,8 @@
         gap: var(--spacing-16);
     }
 
-    &__view-toggle {
+    &__view-toggle,
+    &__result-filter {
         display: flex;
         background: var(--bg-secondary);
         border-radius: var(--radius);

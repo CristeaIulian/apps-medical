@@ -1,11 +1,13 @@
 import { DateFilter } from '../../../types';
 
 export type ViewMode = 'cards' | 'list';
+export type ResultFilter = 'all' | 'problematic';
 
 interface StorageContent {
     activeCategories: number[];
     dateFilter: DateFilter;
     viewMode: ViewMode;
+    resultFilter: ResultFilter;
 }
 
 const LSAppKey = 'medical';
@@ -17,6 +19,8 @@ const getDefaultDateFilter = (): DateFilter => ({
 
 const getDefaultViewMode = (): ViewMode => 'cards';
 
+const getDefaultResultFilter = (): ResultFilter => 'all';
+
 export const getStorageContent = (): StorageContent => {
     const storageContentLS = window.localStorage.getItem(LSAppKey);
 
@@ -27,11 +31,14 @@ export const getStorageContent = (): StorageContent => {
               dateFilter: JSON.parse(storageContentLS).dateFilter || getDefaultDateFilter(),
               // Asigurăm că viewMode există
               viewMode: JSON.parse(storageContentLS).viewMode || getDefaultViewMode(),
+              // Asigurăm că resultFilter există
+              resultFilter: JSON.parse(storageContentLS).resultFilter || getDefaultResultFilter(),
           }
         : {
               activeCategories: [],
               dateFilter: getDefaultDateFilter(),
               viewMode: getDefaultViewMode(),
+              resultFilter: getDefaultResultFilter(),
           };
 };
 
@@ -75,4 +82,17 @@ export const updateStorageViewMode = (viewMode: ViewMode) => {
 export const getStorageViewMode = (): ViewMode => {
     const storageContent = getStorageContent();
     return storageContent.viewMode;
+};
+
+export const updateStorageResultFilter = (resultFilter: ResultFilter) => {
+    const storageContent: StorageContent = getStorageContent();
+
+    storageContent.resultFilter = resultFilter;
+
+    window.localStorage.setItem(LSAppKey, JSON.stringify(storageContent));
+};
+
+export const getStorageResultFilter = (): ResultFilter => {
+    const storageContent = getStorageContent();
+    return storageContent.resultFilter;
 };

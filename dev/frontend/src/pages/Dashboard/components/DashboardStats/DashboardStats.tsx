@@ -2,25 +2,23 @@ import React, { FC } from 'react';
 
 import { Card } from '@memobit/libs';
 
-import { ProblematicValuesData } from '@pages/Dashboard/components/ProblematicValues';
-
 import { AnalysisResults } from '../../../../types';
 
 import './DashboardStats.scss';
 
 interface DashboardStatsProps {
     analysisResults: AnalysisResults[];
-    problematicValues: ProblematicValuesData[];
+    problematicValuesLength: number;
     filteredAnalysisResults: AnalysisResults[];
-    filteredProblematicValues: ProblematicValuesData[];
+    filteredProblematicValuesLength: number;
     showPeriodCards: boolean;
 }
 
 export const DashboardStats: FC<DashboardStatsProps> = ({
     analysisResults,
-    problematicValues,
+    problematicValuesLength,
     filteredAnalysisResults,
-    filteredProblematicValues,
+    filteredProblematicValuesLength,
     showPeriodCards,
 }) => {
     return (
@@ -35,13 +33,13 @@ export const DashboardStats: FC<DashboardStatsProps> = ({
 
             <Card className="dashboard-stats__stat">
                 <h4>Total Valori Problematice</h4>
-                <span className={`dashboard-stats__value ${problematicValues.length > 0 ? 'warning' : ''}`}>
+                <span className={`dashboard-stats__value ${problematicValuesLength > 0 ? 'warning' : ''}`}>
                     {showPeriodCards && (
-                        <span className={`dashboard-stats__value ${filteredProblematicValues.length > 0 ? 'warning' : ''}`}>
-                            {filteredProblematicValues.length} /{' '}
+                        <span className={`dashboard-stats__value ${filteredProblematicValuesLength > 0 ? 'warning' : ''}`}>
+                            {filteredProblematicValuesLength} /{' '}
                         </span>
                     )}
-                    {problematicValues.length}
+                    {problematicValuesLength}
                 </span>
             </Card>
         </div>

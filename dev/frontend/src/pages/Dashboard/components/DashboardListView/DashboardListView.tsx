@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 
-import { getAnalysisType, getGroupedAnalysisItem, getReferenceStatus, getValueStatus } from '@helpers/medicalHelpers';
+import { getAnalysisType, getFilteredResults, getGroupedAnalysisItem, getReferenceStatus, getValueStatus } from '@helpers/medicalHelpers';
+import { ResultFilter } from '@pages/Dashboard/helpers/storage';
 
 import { AnalysisResults, CategoriesMapById, CategoryFilter, DateFilter } from '../../../../types';
 
@@ -12,6 +13,7 @@ interface DashboardListViewProps {
     categoryFilters: CategoryFilter;
     dataCategories: { [p: number]: { analysisResults: AnalysisResults[] } };
     dateFilter: DateFilter;
+    resultFilter: ResultFilter;
     onAnalysisClick?: (analysisId: number) => void;
 }
 
@@ -21,41 +23,11 @@ export const DashboardListView: FC<DashboardListViewProps> = ({
     categoryFilters,
     dataCategories,
     dateFilter,
+    resultFilter,
     onAnalysisClick,
 }) => {
-    // Funcție pentru filtrarea rezultatelor
-    const getFilteredResults = (): AnalysisResults[] => {
-        if (dateFilter.type === 'preset' && dateFilter.preset === 'all') {
-            return analysisResults;
-        }
-
-        const now = new Date();
-        let startDate: Date;
-
-        if (dateFilter.type === 'preset') {
-            switch (dateFilter.preset) {
-                case 'month':
-                    startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-                    break;
-                case '3months':
-                    startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-                    break;
-                case 'year':
-                    startDate = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
-                    break;
-                default:
-                    return analysisResults;
-            }
-            return analysisResults.filter(result => new Date(result.date) >= startDate);
-        } else {
-            // Specific date filter
-            const targetDate = dateFilter.specificDate;
-            return analysisResults.filter(result => new Date(result.date).toISOString().split('T')[0] === targetDate);
-        }
-    };
-
     const getAnalysisRecords = (analysisId: number): AnalysisResults[] => {
-        return getFilteredResults()
+        return getFilteredResults(analysisResults, dateFilter, resultFilter)
             .filter(result => result.analysisId === analysisId)
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Newest first
     };

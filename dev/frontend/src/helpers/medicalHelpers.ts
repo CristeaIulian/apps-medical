@@ -1,5 +1,5 @@
 import { DashboardData } from '@pages/Dashboard';
-import { ProblematicValuesData } from '@pages/Dashboard/components/ProblematicValues';
+import { ResultFilter } from '@pages/Dashboard/helpers/storage';
 
 import { AnalysisResults, CategoriesMapById, Category, DateFilter, OptimalRange } from '../types';
 
@@ -35,22 +35,16 @@ export const prepareDashboardData = (analysisResults: AnalysisResults[], categor
     return dashboardData;
 };
 
-export const getProblematicData = (analysisResults: AnalysisResults[]): ProblematicValuesData[] => {
-    return Object.values(analysisResults)
-        .map(result => {
-            const analysisType = getAnalysisType(result.value, { min: result.optimalRangeMin, max: result.optimalRangeMax });
-            let status: 'low' | 'optimal' | 'high' =
-                analysisType === 'chart'
-                    ? getValueStatus(result.value, { min: result.optimalRangeMin, max: result.optimalRangeMax })
-                    : getReferenceStatus(result.optimalReference, result.userReference);
+export const getProblematicCount = (analysisResults: AnalysisResults[]): number => {
+    return analysisResults.filter(result => {
+        const analysisType = getAnalysisType(result.value, { min: result.optimalRangeMin, max: result.optimalRangeMax });
+        const status: 'low' | 'optimal' | 'high' =
+            analysisType === 'chart'
+                ? getValueStatus(result.value, { min: result.optimalRangeMin, max: result.optimalRangeMax })
+                : getReferenceStatus(result.optimalReference, result.userReference);
 
-            if (status !== 'optimal') {
-                return { result, deviation: status as 'high' | 'low' };
-            }
-
-            return null;
-        })
-        .filter(item => item !== null) as any[];
+        return status !== 'optimal';
+    }).length;
 };
 
 export const filterAnalysisResultsByDate = (analysisResults: AnalysisResults[], dateFilter: DateFilter): AnalysisResults[] => {
@@ -117,4 +111,58 @@ export const getGroupedAnalysisItem = (analysisResults: AnalysisResults[]) => {
     });
 
     return rs;
+};
+
+export const filterResultsByProblematic = (analysisResults: AnalysisResults[], resultFilter: ResultFilter): AnalysisResults[] => {
+    if (resultFilter === 'all') {
+        return analysisResults;
+    }
+
+    // Filter doar rezultatele problematice
+    return analysisResults.filter(result => {
+        const optimalRange = { min: result.optimalRangeMin, max: result.optimalRangeMax };
+        const analysisType = getAnalysisType(result.value, optimalRange);
+
+        let status: 'low' | 'optimal' | 'high';
+
+        if (analysisType === 'chart') {
+            status = getValueStatus(result.value, optimalRange);
+        } else {
+            status = getReferenceStatus(result.optimalReference, result.userReference);
+        }
+
+        return status !== 'optimal';
+    });
+};
+
+export const getFilteredResults = (analysisResults: AnalysisResults[], dateFilter: DateFilter, resultFilter: ResultFilter): AnalysisResults[] => {
+    let filteredByDate = analysisResults;
+
+    if (dateFilter.type !== 'preset' || dateFilter.preset !== 'all') {
+        const now = new Date();
+        let startDate: Date;
+
+        if (dateFilter.type === 'preset') {
+            switch (dateFilter.preset) {
+                case 'month':
+                    startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                    break;
+                case '3months':
+                    startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+                    break;
+                case 'year':
+                    startDate = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+                    break;
+                default:
+                    return filterResultsByProblematic(analysisResults, resultFilter);
+            }
+            filteredByDate = analysisResults.filter(result => new Date(result.date) >= startDate);
+        } else {
+            // Specific date filter
+            const targetDate = dateFilter.specificDate;
+            filteredByDate = analysisResults.filter(result => new Date(result.date).toISOString().split('T')[0] === targetDate);
+        }
+    }
+
+    return filterResultsByProblematic(filteredByDate, resultFilter);
 };
