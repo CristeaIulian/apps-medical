@@ -7,8 +7,14 @@ import { AnalysisResults, CategoriesMapById, Category, DateFilter, OptimalRange 
  * Determines if a test result value is within the optimal range
  */
 export const getValueStatus = (value: number, optimalRange: OptimalRange): 'optimal' | 'high' | 'low' => {
-    if (value > (optimalRange.max || 0)) return 'high';
-    if (value < (optimalRange.min || 0)) return 'low';
+    if (optimalRange.max && value > optimalRange.max) {
+        return 'high';
+    }
+
+    if (value < (optimalRange.min || 0)) {
+        return 'low';
+    }
+
     return 'optimal';
 };
 

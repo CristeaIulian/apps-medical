@@ -396,7 +396,7 @@ const Settings: FC = () => {
                                                         <div className="settings__detail">
                                                             <span className="settings__detail-label">Interval optim:</span>
                                                             <span className="settings__detail-value">
-                                                                {a.optimalRangeMin || 0} - {a.optimalRangeMax} {a.unitName}
+                                                                {a.optimalRangeMin || 0} - {a.optimalRangeMax || '∞'} {a.unitName}
                                                             </span>
                                                         </div>
                                                     )}

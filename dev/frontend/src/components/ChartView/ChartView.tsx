@@ -26,6 +26,17 @@ export interface ChartViewProps {
     isMini?: boolean;
 }
 
+const extrapolateMaxRangeWhenUndefined = (min: number, userMaxValue: number): number => {
+    const diffBetween = Math.abs(userMaxValue - min);
+    const extrapolationCoefficient = 3;
+
+    if (userMaxValue > min) {
+        return userMaxValue + diffBetween * extrapolationCoefficient;
+    } else {
+        return min + diffBetween * extrapolationCoefficient;
+    }
+};
+
 export const ChartView: React.FC<ChartViewProps> = ({
     data,
     title,
@@ -36,6 +47,16 @@ export const ChartView: React.FC<ChartViewProps> = ({
     showLegend = true,
     isMini = false,
 }) => {
+    const optimalRangeMin = optimalRange?.min ? optimalRange.min : optimalRange?.max ? 0 : undefined;
+    const optimalRangeMax = optimalRange?.max
+        ? optimalRange.max
+        : optimalRange?.min && data.length
+          ? extrapolateMaxRangeWhenUndefined(
+                optimalRange.min,
+                data.reduce((maxValue, b) => Math.max(maxValue, b.value), 0)
+            )
+          : undefined;
+
     const chartRef = useRef<any>(null);
 
     // Get CSS custom properties for theming
@@ -90,8 +111,8 @@ export const ChartView: React.FC<ChartViewProps> = ({
     if (optimalRange) {
         chartData.datasets.push(
             {
-                label: 'Interval Optim',
-                data: data.length === 1 ? [optimalRange.max || 0, optimalRange.max || 0, optimalRange.max || 0] : data.map(() => optimalRange.max || 0),
+                label: 'Interval Optim Max',
+                data: data.length === 1 ? [optimalRangeMax || 0, optimalRangeMax || 0, optimalRangeMax || 0] : data.map(() => optimalRangeMax || 0),
                 borderColor: colors.success + '60',
                 backgroundColor: colors.success + '10',
                 pointBackgroundColor: colors.success + '60',
@@ -106,7 +127,7 @@ export const ChartView: React.FC<ChartViewProps> = ({
             },
             {
                 label: 'Interval Optim Min',
-                data: data.length === 1 ? [optimalRange.min || 0, optimalRange.min || 0, optimalRange.min || 0] : data.map(() => optimalRange.min || 0),
+                data: data.length === 1 ? [optimalRangeMin || 0, optimalRangeMin || 0, optimalRangeMin || 0] : data.map(() => optimalRangeMin || 0),
                 borderColor: colors.success + '60',
                 backgroundColor: colors.success + '10',
                 pointBackgroundColor: colors.success + '60',
@@ -174,9 +195,9 @@ export const ChartView: React.FC<ChartViewProps> = ({
 
                             // Add status indicator if optimal range exists
                             if (optimalRange) {
-                                if (value > (optimalRange.max || 0)) {
+                                if (value > (optimalRangeMax || 0)) {
                                     label += ' (↑ ridicat)';
-                                } else if (value < (optimalRange.min || 0)) {
+                                } else if (value < (optimalRangeMin || 0)) {
                                     label += ' (↓ scăzut)';
                                 } else {
                                     label += ' (✓ optim)';
@@ -184,6 +205,8 @@ export const ChartView: React.FC<ChartViewProps> = ({
                             }
 
                             return label;
+                        } else if (context.datasetIndex === 1) {
+                            return `${context.dataset.label}: ${optimalRangeMax === optimalRange?.max ? optimalRange?.max : '∞'}`;
                         } else {
                             return `${context.dataset.label}: ${value}${unit}`;
                         }

@@ -178,8 +178,14 @@ const AnalysisDetails: FC = () => {
     const getValueStatus = (value: number): 'optimal' | 'high' | 'low' => {
         if (!analysisByTypeDetails) return 'optimal';
 
-        if (value > (analysisByTypeDetails.optimalRangeMax || 0)) return 'high';
-        if (value < (analysisByTypeDetails.optimalRangeMin || 0)) return 'low';
+        if (analysisByTypeDetails.optimalRangeMax && value > (analysisByTypeDetails.optimalRangeMax || 0)) {
+            return 'high';
+        }
+
+        if (value < (analysisByTypeDetails.optimalRangeMin || 0)) {
+            return 'low';
+        }
+
         return 'optimal';
     };
 
@@ -356,7 +362,8 @@ const AnalysisDetails: FC = () => {
                                     analysisByTypeDetails.optimalReference
                                 ) : (
                                     <span>
-                                        {analysisByTypeDetails.optimalRangeMin} - {analysisByTypeDetails.optimalRangeMax} {analysisByTypeDetails.unitName}
+                                        {analysisByTypeDetails.optimalRangeMin || 0} - {analysisByTypeDetails.optimalRangeMax || '∞'}{' '}
+                                        {analysisByTypeDetails.unitName}
                                     </span>
                                 )}
                             </div>
