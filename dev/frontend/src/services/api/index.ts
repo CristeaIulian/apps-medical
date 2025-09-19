@@ -83,5 +83,9 @@ export const deleteAnalysisResult = async (id: number): Promise<ResponseDelete> 
 // Categories
 export const loadCategories = async (): Promise<ApiCallListCategoriesResultsReturn> => await getApiCall('categories');
 
+export const addCategory = async (categoryName: string): Promise<ResponseCreate> => await postApiCall('categories/add', { name: categoryName });
+
 // Clinics
 export const loadClinics = async (): Promise<ApiCallListClinicsReturn> => await getApiCall('clinics');
+
+export const addClinic = async (clinicName: string): Promise<ResponseCreate> => await postApiCall('clinics/add', { name: clinicName });

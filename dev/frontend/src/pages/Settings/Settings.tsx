@@ -1,12 +1,25 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 
-import { Button, Card, ConfirmDialog, Dropdown, DropdownOption, InputNumber, InputText, Loading, Modal, Toast } from '@memobit/libs';
+import {
+    Button,
+    Card,
+    ConfirmDialog,
+    Dropdown,
+    DropdownOption,
+    InputNumber,
+    InputText,
+    Loading,
+    Modal,
+    QuickAdd,
+    Toast,
+    useBodyScrollLock,
+} from '@memobit/libs';
 import { useNavigate } from 'react-router';
 
 import { AppHeader } from '@components/AppHeader';
 import { getCategoriesMapById } from '@helpers/medicalHelpers';
 
-import { addAnalysis, deleteAnalysis, loadAnalysisList, loadCategories, updateAnalysis } from '../../services/api';
+import { addAnalysis, addCategory, deleteAnalysis, loadAnalysisList, loadCategories, updateAnalysis } from '../../services/api';
 import { Analysis, AnalysisSaveDTO, CategoriesMapById, Category } from '../../types';
 
 import './Settings.scss';
@@ -55,6 +68,8 @@ const Settings: FC = () => {
         label: name,
         searchText: name,
     }));
+
+    useBodyScrollLock(editModal.isOpen);
 
     const fetchAnalysisList = async () => {
         try {
@@ -130,12 +145,28 @@ const Settings: FC = () => {
         });
     };
 
+    const handleAddCategory = (categoryName: string) => {
+        addCategory(categoryName).then(addCategoryResponse => {
+            if (addCategoryResponse.success) {
+                setToast({ message: addCategoryResponse.message, type: 'success' });
+                fetchAnalysisList();
+            } else {
+                setError(addCategoryResponse.error);
+            }
+        });
+    };
+
     const handleSaveAnalysis = async () => {
         const { analysis, mode } = editModal;
 
         // Validation
         if (!analysis.analysisName?.trim()) {
-            setToast({ message: 'Numele analizei este obligatoriu', type: 'error' });
+            setToast({ message: 'Numele analizei nu a fost introdus', type: 'error' });
+            return;
+        }
+
+        if (!analysis.categoryId) {
+            setToast({ message: 'Categoria analizei nu a fost selectata', type: 'error' });
             return;
         }
 
@@ -495,6 +526,13 @@ const Settings: FC = () => {
                             </div>
 
                             <div className="settings__form-actions">
+                                <QuickAdd
+                                    buttonText="Adauga categorie"
+                                    placeholder="Introdu numele categoriei..."
+                                    title="Adauga categorie noua"
+                                    onSave={handleAddCategory}
+                                    icon="✍️"
+                                />
                                 <Button variant="secondary" onClick={() => setEditModal({ isOpen: false, mode: 'add', analysis: {} })} disabled={saving}>
                                     Anulează
                                 </Button>

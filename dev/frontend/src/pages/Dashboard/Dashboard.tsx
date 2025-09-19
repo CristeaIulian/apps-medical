@@ -247,6 +247,9 @@ export const Dashboard: FC = () => {
                         analysis={analysis}
                         clinics={clinics}
                         isOpen={showAddModal}
+                        onNewClinicAdded={() => {
+                            loadDashboardData();
+                        }}
                         onClose={() => setShowAddModal(false)}
                         onSuccess={() => {
                             loadDashboardData();

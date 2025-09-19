@@ -116,6 +116,8 @@ export const getGroupedAnalysisItem = (analysisResults: AnalysisResults[]) => {
         }
     });
 
+    rs.sort((a, b) => a.analysisName.localeCompare(b.analysisName));
+
     return rs;
 };
 

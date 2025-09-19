@@ -73,11 +73,11 @@ export const DashboardListView: FC<DashboardListViewProps> = ({
         const analysisType = getAnalysisType(result.value, optimalRange);
 
         if (analysisType === 'chart') {
-            if (optimalRange.min !== null && optimalRange.max !== null) {
+            if (optimalRange.min && optimalRange.max) {
                 return `${optimalRange.min} - ${optimalRange.max} ${result.unitName || ''}`.trim();
-            } else if (optimalRange.min !== null) {
+            } else if (optimalRange.min) {
                 return `> ${optimalRange.min} ${result.unitName || ''}`.trim();
-            } else if (optimalRange.max !== null) {
+            } else if (optimalRange.max) {
                 return `< ${optimalRange.max} ${result.unitName || ''}`.trim();
             }
             return '-';
@@ -120,13 +120,14 @@ export const DashboardListView: FC<DashboardListViewProps> = ({
                                 <div className="dashboard-list-view__header-cell">Data</div>
                             </div>
 
-                            {analysisResultWithDataUnique.map(arwd => {
+                            {analysisResultWithDataUnique.map((arwd, ndx) => {
                                 const records = getAnalysisRecords(arwd.analysisId);
 
                                 return records.map((record, index) => (
                                     <div
                                         key={`${arwd.analysisLogId}-${index}`}
                                         className={`dashboard-list-view__row ${getStatusClass(record)}`}
+                                        style={{ backgroundColor: ndx % 2 === 0 ? 'transparent' : '#2b2727' }}
                                         onClick={() => handleRowClick(arwd.analysisId)}
                                     >
                                         <div className="dashboard-list-view__cell">

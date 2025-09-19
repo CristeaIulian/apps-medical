@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Button, Dropdown, DropdownOption, InputNumber, InputText, Modal, Toast } from '@memobit/libs';
+import { Button, Dropdown, DropdownOption, InputNumber, InputText, Modal, QuickAdd, Toast, useBodyScrollLock } from '@memobit/libs';
 
-import { saveAnalysisResults } from '../../services/api';
+import { addClinic, saveAnalysisResults } from '../../services/api';
 import { Analysis, AnalysisResultSaveDTO, Clinic } from '../../types';
 
 import './AddResultsModal.scss';
@@ -24,14 +24,17 @@ interface AddResultsModalProps {
     clinics: Clinic[];
     isOpen: boolean;
     onClose: () => void;
+    onNewClinicAdded: () => void;
     onSuccess: () => void;
 }
 
-const AddResultsModal: React.FC<AddResultsModalProps> = ({ analysis, clinics, isOpen, onClose, onSuccess }) => {
+const AddResultsModal: React.FC<AddResultsModalProps> = ({ analysis, clinics, isOpen, onClose, onNewClinicAdded, onSuccess }) => {
     const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
     const [selectedClinicId, setSelectedClinicId] = useState<number | null>(null);
     const [clinicSearch, setClinicSearch] = useState<string>('');
     const [analysisResults, setAnalysisResults] = useState<AnalysisResultEntry[]>([]);
+
+    useBodyScrollLock(isOpen);
 
     // Data
     const [filteredClinics, setFilteredClinics] = useState<Clinic[]>([]);
@@ -106,6 +109,17 @@ const AddResultsModal: React.FC<AddResultsModalProps> = ({ analysis, clinics, is
             setSelectedClinicId(Number(newSelection.value));
             setClinicSearch(newSelection.label);
         }
+    };
+
+    const handleAddClinic = (clinicName: string) => {
+        addClinic(clinicName).then(addClinicResponse => {
+            if (addClinicResponse.success) {
+                setToast({ message: addClinicResponse.message, type: 'success' });
+                onNewClinicAdded();
+            } else {
+                setError(addClinicResponse.error);
+            }
+        });
     };
 
     const handleClinicSearchChange = (value: string) => {
@@ -226,9 +240,6 @@ const AddResultsModal: React.FC<AddResultsModalProps> = ({ analysis, clinics, is
                 <Modal onClose={onClose} title="Adaugă Rezultate Analize" size="large" className="add-results-modal">
                     <div className="add-results-modal__content">
                         <>
-                            {/* Error Display */}
-                            {error && <div className="add-results-modal__error">{error}</div>}
-
                             {/* Basic Information */}
                             <div className="add-results-modal__basic-info">
                                 <h3>Informații de bază</h3>
@@ -347,8 +358,18 @@ const AddResultsModal: React.FC<AddResultsModalProps> = ({ analysis, clinics, is
                                 </div>
                             </div>
 
+                            {/* Error Display */}
+                            {error && <div className="add-results-modal__error">{error}</div>}
+
                             {/* Actions */}
                             <div className="add-results-modal__actions">
+                                <QuickAdd
+                                    buttonText="Adauga clinica"
+                                    placeholder="Introdu numele clinicii..."
+                                    title="Adauga clinica noua"
+                                    onSave={handleAddClinic}
+                                    icon="✍️"
+                                />
                                 <Button variant="secondary" onClick={onClose} disabled={saving}>
                                     Anulează
                                 </Button>
